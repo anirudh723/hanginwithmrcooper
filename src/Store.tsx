@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { isLoggedIn } from './api';
 import { Redirect } from 'react-router';
+import { ProductList } from './components/ProductList'
 
 export const Store: React.SFC = props => {
     return (
@@ -10,6 +11,7 @@ export const Store: React.SFC = props => {
                     <p className="notification is-primary">
                         Product list
                     </p>
+                    <ProductList/>
                 </div>
                 <div className="column">
                     <p className="notification is-danger">
