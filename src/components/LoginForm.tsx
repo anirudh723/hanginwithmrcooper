@@ -3,6 +3,7 @@ import '../LoginForm.css';
 import { login } from '../api';
 
 export const LoginForm: React.SFC = props => {
+    const logInSuccess = "Logged in successfully!";
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [loginResult, setLoginResult] = React.useState("");
@@ -10,8 +11,8 @@ export const LoginForm: React.SFC = props => {
     const handleSubmit = (event: React.MouseEvent) => {
         event.preventDefault();
         login(email, password)
-        .then(() => setLoginResult("Logged in successfully!"))
-        .catch((err) => setLoginResult(err));
+            .then(() => setLoginResult(logInSuccess))
+            .catch((err) => setLoginResult(err));
     }
 
     const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
