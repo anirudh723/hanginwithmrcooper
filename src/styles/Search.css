@@ -1,0 +1,15 @@
+h1 {
+    font-size: 2em !important;
+}
+.searchSection {
+    width: fit-content;
+    margin: 3% 0;
+}
+
+.searchBox {
+    margin: 4% 0;
+}
+
+.radioButtonGroup label{
+    padding: 0 3%;
+}

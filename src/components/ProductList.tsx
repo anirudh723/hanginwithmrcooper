@@ -1,30 +1,51 @@
 import * as React from 'react';
 import { getProductById, getProducts, ProductDataModel } from '../api';
-import '../ProductList.css'
+import '../styles/ProductList.css'
 
-export const ProductList: React.SFC = props => {
-    const notEnoughQuantity = "Not enough quantity for this product. Please select a lower value";
+const NOT_ENOUGH_QUANTITY = "Not enough quantity for this product. Please select a lower value";
+const NAME = "Product Name";
+const DESCRIPTION = "Product Description";
+
+export const ProductList: React.FC<{addToCart: (productToAdd: ProductDataModel, quantity: number) => void, filterCriteria: string[]}> = ({addToCart, filterCriteria}) => {
+    
     const [products, setProducts] = React.useState(Array<ProductDataModel>());
     const [productQuantities, setProductQuantities] = React.useState(new Map());
 
     React.useEffect(() => {
         (async function() {
-                let result = await getProducts();
-                setProducts(result);
+            let products = await getProducts();
+            let filteredProducts = filterProducts(products)
+            setProducts(filteredProducts);
         })()
-    }, []);
+    }, [filterCriteria]);
         
+
+    const filterProducts = (products: ProductDataModel[]) => {
+        const searchInput = filterCriteria[0];
+        const searchType = filterCriteria[1];
+        var filteredProducts = Array.from(products);
+        if (searchInput != "") {
+            if (searchType == NAME) {
+                filteredProducts = products.filter(product => product.name == searchInput)
+            } else if (searchType == DESCRIPTION) {
+                filteredProducts = products.filter(product => product.description == searchInput)
+            }
+        }
+        return filteredProducts;
+    }
+
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, productId: number) => {
         event.preventDefault();
         setProductQuantities(productQuantities.set(productId, event.target.value))
     }
 
-    const handleAddToCart = async (productId: number) => {
+    const handleAddToCart = async (event: React.MouseEvent, productId: number) => {
+        event.preventDefault();
         const product = await getProductById(productId);
         if (product.stock < productQuantities.get(productId)) {
-            alert(notEnoughQuantity);
+            alert(NOT_ENOUGH_QUANTITY); // could do a modal instead
         } else {
-
+            addToCart(product, productQuantities.get(productId));
         }
     }
 
@@ -42,10 +63,9 @@ export const ProductList: React.SFC = props => {
                         <input
                             type="number"
                             placeholder="Enter product quantity"
-                            value={productQuantities.get(product.id)}
                             onChange={(e) => handleQuantityChange(e, product.id)}
                         />
-                        <button onClick={handleAddToCart(product.id)}>Add to Cart</button>
+                        <button onClick={e => handleAddToCart(e, product.id)}>Add to Cart</button>
                     </div>
                 );
             })}

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-do
 import { Login } from './Login';
 import { Store } from './Store';
 import { ProductDetails } from './ProductDetails';
+import { Logout } from './Logout';
 
 export const App: React.SFC = () => {
     return (
@@ -25,6 +26,9 @@ export const App: React.SFC = () => {
                 </Route>
                 <Route path="/details/:id">
                     <ProductDetails />
+                </Route>
+                <Route path="/logout">
+                    <Logout />
                 </Route>
                 <Route path="/">
                     {

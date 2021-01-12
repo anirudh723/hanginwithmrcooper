@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { LoginForm } from './components/LoginForm';
 
-export const Login: React.SFC = props => {
+export const Login: React.FC = props => {
     return (
         <div className="container">
             <div className="is-fluid has-background-dark has-text-light">
