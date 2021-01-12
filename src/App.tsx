@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { isLoggedIn } from "./api";
 import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
-import { Login } from './Login';
-import { Store } from './Store';
-import { ProductDetails } from './ProductDetails';
-import { Logout } from './Logout';
+import { Login } from './pages/Login';
+import { Store } from './pages/Store';
+import { ProductDetails } from './pages/ProductDetails';
+import { Logout } from './pages/Logout';
 
 export const App: React.SFC = () => {
     return (

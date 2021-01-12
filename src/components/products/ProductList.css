@@ -1,0 +1,7 @@
+a h3 {
+    color: white;
+}
+
+a:hover h3 {
+    color: salmon;
+}

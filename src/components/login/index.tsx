@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
-import { login } from '../api';
-import '../styles/LoginForm.css';
+import { login } from '../../api';
+import './index.css';
 
 export const LoginForm: React.FC = props => {
     const [email, setEmail] = React.useState("");
@@ -16,36 +16,30 @@ export const LoginForm: React.FC = props => {
             .catch((err) => setLoginResult(err));
     }
 
-    const handleEmailChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        setEmail(event.target.value);
-    }
-
-    const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        setPassword(event.target.value);
-    }
-
     return (
-        <div className="container">
+        <div className="container mt-4">
             {redirectToStore ? <Redirect to="/store" /> : (
                 <div>
-                    <form className="has-text-light loginForm">
+                    <form className="has-text-light p-4 loginForm">
                         <label>Email</label>
                         <input
                             required
+                            className="p-2 mb-5 loginInput"
                             type="email"
                             placeholder="Enter your email"
                             value={email}
-                            onChange={handleEmailChange}
+                            onChange={(e) => {setEmail(e.target.value)}}
                         />
                         <label>Password</label>
                         <input
                             required
+                            className="p-2 mb-5 loginInput"
                             type="password"
                             placeholder="Enter your password"
                             value={password}
-                            onChange={handlePasswordChange}
+                            onChange={(e) => {setPassword(e.target.value)}}
                         />
-                        <button onClick={(e) => { handleSubmit(e); }}>Log In</button>
+                        <button onClick={handleSubmit}>Log In</button>
                     </form>
                     <span className="has-text-light">{loginResult}</span>
                 </div>
