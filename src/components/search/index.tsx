@@ -42,7 +42,7 @@ export const Search: React.FC<{applyFilterCriteria: (input: string, type: string
                 </div>
             </div>
         </div>
-        <div className="pb-3 row">
+        <div className="pb-5 row">
             <button onClick={handleSubmitSearch}>Search</button>
         </div>
         </div>

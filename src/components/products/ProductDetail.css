@@ -1,6 +1,6 @@
-/* .changeDetailsContainer {
-    width: fit-content !important;
-} */
+.changeDetailsContainer {
+    border: white solid 1px;
+}
 
 .detailChangeBox {
     width: 100%;

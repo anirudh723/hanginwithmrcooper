@@ -1,37 +1,45 @@
 import * as React from 'react';
-import { checkout, getUserName, getUserAccountBalance, ProductDataModel } from '../../api';
+import { checkout, getUserName, ProductDataModel } from '../../api';
+import { Product } from '../products/Product'
+import './index.css'
 
-export const ShoppingCart: React.FC<{productsToBuy: Map<ProductDataModel, number>, clearCart: () => void}> = ({ productsToBuy, clearCart }) => {
+const PRICELESS = "priceless"
+const CART_BALANCE_TOO_MUCH = "You cannot checkout because your cart balance is higher than your account balance."
+
+interface ShoppingCartProps {
+    productsToBuy: Map<ProductDataModel, number>,
+    accountBalance: string,
+    clearCart: (totalCart: number) => void
+}
+
+export const ShoppingCart: React.FC<ShoppingCartProps> = ({ productsToBuy, accountBalance, clearCart }) => {
     const [checkoutResult, setCheckoutResult] = React.useState("");
     const [userName, setUserName] = React.useState("");
-    const [accountBalance, setAccountBalance] = React.useState("");
+    const [cartTotal, setCartTotal] = React.useState(0);
 
     React.useEffect(() => {
         (async function() {
             let nameResult = await getUserName();
-            let accountBalanceResult = await getUserAccountBalance();
             setUserName(nameResult);
-            setAccountBalance(accountBalanceResult);
+            setCartTotal(calculateCartBalance());
         })()
-    }, []);
+    }, [productsToBuy]);
 
     // takes in the string dollar amount, strips the $ and commas, and returns the numeric value
     const getNumericBalance = (balance: string): number => {
-        return parseFloat(balance.substring(1).replace(/,/g, ''));
+        if (balance === PRICELESS) { // I'm making priceless just be 0.
+            return 0;
+        }
+        return +parseFloat(balance.substring(1).replace(/,/g, '')).toFixed(2);
     }
 
     const handleCheckout = () => {
         let products = Array.from(productsToBuy.keys());
-        let totalCartBalance = calculateCartBalance();
-        if (totalCartBalance > getNumericBalance(accountBalance)) {
-            alert("You do not have enough balance to purchase everything in the cart.");
-        } else {
-            checkout(products)
-            .then(result => {
-                clearCart();
-                setCheckoutResult(result);
-            });
-        }
+        checkout(products)
+        .then(result => {
+            clearCart(cartTotal);
+            setCheckoutResult(result);
+        });
     }
 
     const calculateCartBalance = () => {
@@ -50,23 +58,23 @@ export const ShoppingCart: React.FC<{productsToBuy: Map<ProductDataModel, number
                     <p className="pb-4">Hello, {userName}. Your account balance is {accountBalance}.</p>
                     {Array.from(productsToBuy.entries()).map((productAndQuantity) => {
                         if (productAndQuantity[1] > 0) {
-                           return (
-                                <div className="productInfo pb-3">
-                                    <a href={`/details/${productAndQuantity[0].id}`}>
-                                        <img alt="Product" src={productAndQuantity[0].imageUrl} width="500" />
-                                        <h3>Name: {productAndQuantity[0].name}</h3>
-                                    </a>
-                                    <p>Price: {productAndQuantity[0].price}</p>
-                                    <p>Rating: {productAndQuantity[0].rating}</p>
-                                    <p>Quantity: {productAndQuantity[1]}</p>
-                                    <p>Total Price: ${getNumericBalance((productAndQuantity[0]).price) * productAndQuantity[1]}</p>
+                            const productProps = { product: productAndQuantity[0], store: false }
+                            return (
+                                <div className="productInfo pt-3 pb-3">
+                                    <Product {...productProps}/>
+                                    <div className="quantityAndTotalPrice">
+                                        <p>Quantity: {productAndQuantity[1]}</p>
+                                        <p>Total Price: ${getNumericBalance((productAndQuantity[0]).price) * productAndQuantity[1]}</p>
+                                    </div>   
                                 </div>
-                            ); 
+                            );
                         }
                     })}
-                    <button className="mt-4 is-size-6" onClick={handleCheckout}>Checkout</button>
+                    <p>Your cart total is ${cartTotal}.</p>
+                    <button disabled={cartTotal > getNumericBalance(accountBalance)} className="mt-4 is-size-6" onClick={handleCheckout}>Checkout</button>
                     <div>
                         <p>{checkoutResult}</p>
+                        {cartTotal > getNumericBalance(accountBalance) ? <span>{CART_BALANCE_TOO_MUCH}</span> : <span></span>}
                     </div>
                 </div>
             ) :
