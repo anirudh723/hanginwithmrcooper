@@ -3,26 +3,21 @@ import { getProductById, isAdmin, ProductDataModel } from '../../api';
 import { Product } from './Product'
 import { useParams } from 'react-router';
 import './ProductDetail.css'
+import { StarRating } from '../star/StarRating';
 
 const _ = require("lodash")
 
 export const ProductDetail: React.FC = props => {
+    const initialState = { productName: "", productPrice: null, productDescription: "", productRating: null }
+    let { id } = useParams<{ id: string }>();
+
     const [product, setProduct] = React.useState<ProductDataModel>();
     const [isUserAdmin, setIsUserAdmin] = React.useState(false);
-
-    const initialState = {
-        productName: "",
-        productPrice: null,
-        productDescription: ""
-    }
     const [productName, setProductName] = React.useState(initialState.productName);
     const [productPrice, setProductPrice] = React.useState<number | null>(initialState.productPrice);
     const [productDescription, setProductDescription] = React.useState(initialState.productDescription);
-
-    // const [detailToChange, setDetailToChange] = React.useState("");
-    // const [changeToDetail, setChangeToDetail] = React.useState("");
-    let { id } = useParams<{ id: string }>();
-
+    const [productRating, setProductRating] = React.useState<number>(0);
+    
     React.useEffect(() => {
         (async function() {
             let productResult = await getProductById(+id);
@@ -35,15 +30,10 @@ export const ProductDetail: React.FC = props => {
     const handleProductChange = (event: React.MouseEvent) => {
         event.preventDefault();
         if (product) {
-            if (!(_.isEmpty(productName))) {
-                setProduct(_.clone(_.set(product, "name", productName)));
-            }
-            if (productPrice) {
-                setProduct(_.clone(_.set(product, "price", "$" + productPrice.toString())));
-            }
-            if (!(_.isEmpty(productDescription))) {
-                setProduct(_.clone(_.set(product, "description", productDescription)));
-            }
+            if (!(_.isEmpty(productName))) setProduct(_.clone(_.set(product, "name", productName)));
+            if (productPrice) setProduct(_.clone(_.set(product, "price", "$" + productPrice.toString())));
+            if (!(_.isEmpty(productDescription))) setProduct(_.clone(_.set(product, "description", productDescription)));
+            if (productRating != 0) setProduct(_.clone(_.set(product, "rating", productRating)));
             setFieldsToDefault(event);
         }
     }
@@ -53,8 +43,10 @@ export const ProductDetail: React.FC = props => {
         setProductName(initialState.productName);
         setProductPrice(initialState.productPrice);
         setProductDescription(initialState.productDescription);
+        setProductRating(0);
     }
 
+    const starRatingProps = {rating: productRating, setProductRating: setProductRating}
     return (
         <div className="columns">
             {product ? (
@@ -89,11 +81,15 @@ export const ProductDetail: React.FC = props => {
                     <div className="field">
                         <label>Change Product Description</label>
                         <textarea
-                            className="p-2 mb-5 detailChangeBox"
+                            className="p-2 mb-3 detailChangeBox"
                             placeholder="Enter new description here..."
                             value={productDescription}
                             onChange={(e) => { setProductDescription(e.target.value) }} 
                         />
+                    </div>
+                    <div className="field">
+                        <label>Change Product Rating</label>
+                        <StarRating {...starRatingProps}/>
                     </div>
                     <div className="field is-grouped">
                         <div className="control">
@@ -102,7 +98,7 @@ export const ProductDetail: React.FC = props => {
                         <div className="control">
                             <button onClick={setFieldsToDefault} className="button is-link is-light">Cancel</button>
                         </div>
-                    </div>
+                    </div> 
                 </form>
             ) :
                 <div></div>}

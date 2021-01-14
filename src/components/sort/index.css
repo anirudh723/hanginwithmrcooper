@@ -1,0 +1,12 @@
+.sortContainer {
+    border: white solid 1px;
+    height: 100%;
+}
+
+.sortItem {
+    cursor: pointer;
+}
+
+.visibleDropdownItem {
+    width: 100%;
+}
