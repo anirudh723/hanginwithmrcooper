@@ -4,7 +4,9 @@ import { Redirect } from 'react-router';
 import { ProductList } from '../components/products/ProductList';
 import { ShoppingCart } from '../components/cart';
 import { Search } from '../components/search/Search'
-import { Sort } from '../components/sort';
+//import { Sort } from '../components/sort';
+import { Sort } from '../components/sort/Sort';
+import { ORDER } from '../Order';
 
 const NOT_ENOUGH_QUANTITY = "Not enough quantity for this product. Please select a lower value";
 const PRICELESS = "priceless"
@@ -13,7 +15,8 @@ export const Store: React.FC = props => {
     const [productsToBuy, setProductsToBuy] = React.useState(new Map<ProductDataModel, number>());
     const [accountBalance, setAccountBalance] = React.useState("");
     const [filterCriteria, setFilterCriteria] = React.useState(new Map<string, string | number[]>());
-    const [sortCriteria, setSortCriteria] = React.useState("Name");
+    //const [sortCriteria, setSortCriteria] = React.useState("Name");
+    const [sortTypes, setSortTypes] = React.useState(new Map<string, ORDER>());
     
     React.useEffect(() => {
         (async function() {
@@ -47,10 +50,10 @@ export const Store: React.FC = props => {
         setFilterCriteria(new Map(filters));
     }
 
-    // callback function passed to Search to save sort critera here and then pass down to ProductList
-    const applySortCriteria = (sortCriteria: string): void => {
-        setSortCriteria(sortCriteria);
-    }
+    // // callback function passed to Search to save sort critera here and then pass down to ProductList
+    // const applySortCriteria = (sortCriteria: string): void => {
+    //     setSortCriteria(sortCriteria);
+    // }
 
     // takes in the string dollar amount, strips the $ and commas, and returns the numeric value
     const getNumericBalance = (balance: string): number => {
@@ -63,18 +66,16 @@ export const Store: React.FC = props => {
     // props object for each child component
     const shoppingCartProps = { productsToBuy: productsToBuy, accountBalance: accountBalance, clearCart: clearCart }
     const searchProps = { applyFilterCriteria: applyFilterCriteria }
-    const sortProps = { applySortCriteria: applySortCriteria }
-    const productListProps = { addToCart: addToCart, filterCriteria: filterCriteria, sortCriteria: sortCriteria }
+    const sortProps = {sortTypes: sortTypes, setSortTypes: setSortTypes}
+    const productListProps = { addToCart: addToCart, filterCriteria: filterCriteria, sortTypes: sortTypes }
 
     return (
         <div className="container is-fluid has-background-dark">
-            <div className="columns">
-                <div className="column is-four-fifths">
-                    <Search {...searchProps}/>
-                </div>
-                <div className="column">
-                    <Sort {...sortProps}/>
-                </div>
+            <div>
+                <Search {...searchProps}/>
+            </div>
+            <div className="column is-half">
+                <Sort {...sortProps} />
             </div>
             <div className="columns">   
                 <div className="column is-two-thirds">
