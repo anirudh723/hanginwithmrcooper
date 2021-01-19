@@ -1,21 +1,17 @@
 import * as React from 'react';
-import { checkout, getUserName, ProductDataModel } from '../../api';
+import { checkout, getUserName } from '../../api';
 import { Product } from '../products/Product'
+import { StoreContext } from '../../pages/Store'
 import './index.css'
 
 const PRICELESS = "priceless"
 const CART_BALANCE_TOO_MUCH = "You cannot checkout because your cart balance is higher than your account balance."
 
-interface ShoppingCartProps {
-    productsToBuy: Map<ProductDataModel, number>,
-    accountBalance: string,
-    clearCart: (totalCart: number) => void
-}
-
-export const ShoppingCart: React.FC<ShoppingCartProps> = ({ productsToBuy, accountBalance, clearCart }) => {
+export const ShoppingCart: React.FC = props => {
     const [checkoutResult, setCheckoutResult] = React.useState("");
     const [userName, setUserName] = React.useState("");
     const [cartTotal, setCartTotal] = React.useState(0);
+    const { productsToBuy, accountBalance, clearCart } = React.useContext(StoreContext);
 
     React.useEffect(() => {
         (async function() {

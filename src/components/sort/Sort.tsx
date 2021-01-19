@@ -6,15 +6,13 @@ import { Price } from './Price';
 import { Rating } from './Rating';
 
 interface SortProps {
-    sortTypes: Map<string, ORDER>,
-    setSortTypes: (newSortTypes: Map<string, ORDER>) => void
+    applySortCriteria: (sortType: string, order: ORDER) => void
 }
 
-export const Sort: React.FC<SortProps> = ({sortTypes, setSortTypes}) => {
-    //const [sortTypes, setSortTypes] = React.useState(new Map<string, ORDER>())
+export const Sort: React.FC<SortProps> = ({applySortCriteria}) => {
 
     const setSortType = (sortType: string, order: ORDER) => {
-        setSortTypes(new Map(sortTypes.set(sortType, order)));
+        applySortCriteria(sortType, order);
     }
 
     return (

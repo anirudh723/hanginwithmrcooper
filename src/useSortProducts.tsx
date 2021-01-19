@@ -1,20 +1,20 @@
-import * as React from 'react';
 import { ProductDataModel } from './api';
 import { ORDER } from './Order';
 
 const _ = require("lodash");
 
-// custom hook for sorting
-export const useSortProducts = (products: ProductDataModel[], sortTypes: Map<string, ORDER>) => {
-    const [sortedProducts, setSortedProducts] = React.useState(products);
-    React.useEffect(() => {
+// custom hook that returns a function to sort products
+export const useSortProducts = (): ((products: ProductDataModel[], sortTypes: Map<string, ORDER>) => ProductDataModel[]) => {
+
+    const sortProducts = (products: ProductDataModel[], sortTypes: Map<string, ORDER>): ProductDataModel[] => {
+        var sortedProducts = Array.from(products);
         if (!(_.isEmpty(sortTypes))) {
-            var temp = Array.from(products);
             let types = Array.from(sortTypes.keys());
             let orders = Array.from(sortTypes.values());
-            temp = _.orderBy(temp, types, orders);
-            setSortedProducts(temp)
+            sortedProducts = _.orderBy(sortedProducts, types, orders);
         }
-    }, [sortTypes])
-    return sortedProducts;
+        return sortedProducts;
+    }
+    
+    return sortProducts;
 }

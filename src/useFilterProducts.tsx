@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { ProductDataModel } from './api';
 import { getNumericBalance } from './utils/getNumericBalance'
 
@@ -9,30 +8,29 @@ const RATING = "Rating";
 
 const _ = require("lodash");
 
-// custom hook for filtering
-export const useFilterProducts = (products: ProductDataModel[], filterCriteria: Map<string, string | number[]>) => {
-    const [filteredProducts, setFilteredProducts] = React.useState(products);
+// custom hook that returns a function to filter products
+export const useFilterProducts = (): ((products: ProductDataModel[], filterCriteria: Map<string, string | number[]>) => ProductDataModel[]) => {
 
-    React.useEffect(() => {
-        var temp = Array.from(filteredProducts);
+    const filterProducts = (products: ProductDataModel[], filterCriteria: Map<string, string | number[]>): ProductDataModel[] => {
+        var filteredProducts = Array.from(products);
         Array.from(filterCriteria.entries()).map(([type, filter]) => {
             switch (type) {
                 case NAME:
-                    temp = _.filter(temp, product => product.name === filter);
+                    filteredProducts = _.filter(filteredProducts, product => product.name === filter);
                     break;
                 case DESCRIPTION:
-                    temp = _.filter(temp, product => product.description === filter);
+                    filteredProducts = _.filter(filteredProducts, product => product.description === filter);
                     break;
                 case PRICE:
-                    temp = _.filter(temp, product => getNumericBalance(product.price) >= filter[0] && getNumericBalance(product.price) <= filter[1]);
+                    filteredProducts = _.filter(filteredProducts, product => getNumericBalance(product.price) >= filter[0] && getNumericBalance(product.price) <= filter[1]);
                     break;
                 case RATING:
-                    temp = _.filter(temp, product => product.rating >= filter[0] && product.rating <= filter[1]);
+                    filteredProducts = _.filter(filteredProducts, product => product.rating >= filter[0] && product.rating <= filter[1]);
                     break;
             }
         })
-        setFilteredProducts(temp);
-
-    }, []);
-    return filteredProducts
+        return filteredProducts;
+    }
+    
+    return filterProducts;
 }
