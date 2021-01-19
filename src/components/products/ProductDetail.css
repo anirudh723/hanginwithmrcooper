@@ -1,4 +1,11 @@
+.wrapper {
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .changeDetailsContainer {
+    display: flex;
+    flex-direction: column;
     border: white solid 1px;
 }
 

@@ -5,3 +5,7 @@ a h3 {
 a:hover h3 {
     color: salmon;
 }
+
+.productInfo {
+    display: flex;
+}

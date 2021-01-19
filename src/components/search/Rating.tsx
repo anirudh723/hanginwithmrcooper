@@ -13,15 +13,17 @@ export const Rating: React.FC<RatingProps> = ({lowerBoundRating, upperBoundRatin
         <div>
             <h2>Product Rating</h2>
             <input
-                className="searchInput p-2"
+                className="p-2"
                 type="number" 
-                placeholder="Specify a lower bound rating..."
+                min={0}
+                placeholder="Lower bound rating..."
                 value={lowerBoundRating || ""}
                 onChange={(e) => setLowerBoundRating(e.target.valueAsNumber)}/>
             <input
-                className="searchInput mt-1 p-2"
-                type="number" 
-                placeholder="Specify an upper bound rating..."
+                className="mt-1 ml-1 p-2"
+                type="number"
+                min={0} 
+                placeholder="Upper bound rating..."
                 value={upperBoundRating || ""}
                 onChange={(e) => setUpperBoundRating(e.target.valueAsNumber)}/>
         </div>

@@ -11,9 +11,9 @@ export const Name: React.FC<NameProps> = ({name, setName}) => {
         <div>
             <h2>Product Name</h2>
             <input
-                className="searchInput p-2"
+                className="p-2"
                 type="text" 
-                placeholder="Search for a product name here..."
+                placeholder="Specify name..."
                 value={name}
                 onChange={(e) => setName(e.target.value)}/>
         </div>

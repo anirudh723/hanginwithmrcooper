@@ -17,14 +17,14 @@ export const Product: React.FC<ProductProps> = ({product, handleAddToCart, store
     }
 
     return (
-        <div className="productInfo pb-3 columns is-vcentered">
-            <div className="column is-half">
+        <div className="productInfo pb-3">
+            <div>
                 <a href={`/details/${product.id}`}>
-                    <img alt="Product" src={product.imageUrl} width="500" />
                     <h3>Name: {product.name}</h3>
+                    <img alt="Product" src={product.imageUrl} width="500" />
                 </a>
             </div>
-            <div className="column is-half">
+            <div className="pt-6 pl-6">
                 <p>Price: {product.price}</p>
                 <p>Description: {product.description}</p>
                 <p>Rating: {product.rating}</p>

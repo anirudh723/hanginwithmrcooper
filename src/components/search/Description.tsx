@@ -11,9 +11,9 @@ export const Description: React.FC<DescriptionProps> = ({description, setDescrip
         <div>
             <h2>Product Description</h2>
             <input
-                className="searchInput p-2"
+                className="p-2"
                 type="text" 
-                placeholder="Search for a product description here..."
+                placeholder="Specify description..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}/>
         </div>

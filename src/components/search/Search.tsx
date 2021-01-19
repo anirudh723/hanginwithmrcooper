@@ -28,11 +28,12 @@ export const Search: React.FC<SearchProps> = ({applyFilterCriteria}) => {
     const handleSubmitSearch = (event: React.MouseEvent) => {
         event.preventDefault();
         let filterCriteria = new Map<string, string | number[]>();
-
+        
         if (!(_.isEmpty(name))) filterCriteria.set(NAME, name);
         if (!(_.isEmpty(description))) filterCriteria.set(DESCRIPTION, description);
         if (lowerBoundPrice && upperBoundPrice) filterCriteria.set(PRICE, [lowerBoundPrice, upperBoundPrice]);
         if (lowerBoundRating && upperBoundRating) filterCriteria.set(RATING, [lowerBoundRating, upperBoundRating]);
+        
         setFieldsToDefault();
         applyFilterCriteria(filterCriteria);
     }
@@ -50,22 +51,25 @@ export const Search: React.FC<SearchProps> = ({applyFilterCriteria}) => {
     const descriptionProps = { description: description, setDescription: setDescription };
     const priceProps = { lowerBoundPrice: lowerBoundPrice, upperBoundPrice: upperBoundPrice, setLowerBoundPrice: setLowerBoundPrice, setUpperBoundPrice: setUpperBoundPrice};
     const ratingProps = { lowerBoundRating: lowerBoundRating, upperBoundRating: upperBoundRating, setLowerBoundRating: setLowerBoundRating, setUpperBoundRating: setUpperBoundRating };
-    
-    const searchComponents = [<Name {...nameProps}/>, <Description {...descriptionProps}/>, <Price {...priceProps}/>, <Rating {...ratingProps}/>]
     return (
-        <div className="has-text-light p-4 searchContainer">
-            <h2 className="is-size-3 mb-2">Search for products</h2>
+        <div className="searchWrapper has-text-light p-4">
+            <p className="is-size-3 mb-2">Search for products</p>
             
-            <div className="has-text-light columns">
-                {searchComponents.map(searchComponent => {
-                    return (
-                        <div className={"column is-one-quarter"}>
-                            {searchComponent}
-                        </div>
-                    )
-                })}
+            <div className="has-text-light searchContainer">
+                <div className="searchBox">
+                    <Name {...nameProps}/>
+                </div>
+                <div className="searchBox">
+                    <Description {...descriptionProps}/>
+                </div>
+                <div className="searchBox">
+                    <Price {...priceProps}/>
+                </div>
+                <div className="searchBox">
+                    <Rating {...ratingProps}/>
+                </div>
             </div>
-            <div className="pb-5">
+            <div className="py-5">
                 <button className="is-size-5" onClick={handleSubmitSearch}>Submit</button>
             </div>
         </div>

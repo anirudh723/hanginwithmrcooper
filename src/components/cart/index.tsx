@@ -2,7 +2,6 @@ import * as React from 'react';
 import { checkout, getUserName } from '../../api';
 import { Product } from '../products/Product'
 import { StoreContext } from '../../pages/Store'
-import './index.css'
 
 const PRICELESS = "priceless"
 const CART_BALANCE_TOO_MUCH = "You cannot checkout because your cart balance is higher than your account balance."
@@ -56,17 +55,15 @@ export const ShoppingCart: React.FC = props => {
                         if (productAndQuantity[1] > 0) {
                             const productProps = { product: productAndQuantity[0], store: false }
                             return (
-                                <div className="productInfo pt-3 pb-3">
+                                <div className="py-3">
                                     <Product {...productProps}/>
-                                    <div className="quantityAndTotalPrice">
-                                        <p>Quantity: {productAndQuantity[1]}</p>
-                                        <p>Total Price: ${getNumericBalance((productAndQuantity[0]).price) * productAndQuantity[1]}</p>
-                                    </div>   
+                                    <p>Quantity: {productAndQuantity[1]}</p>
+                                    <p>Total Price: ${getNumericBalance((productAndQuantity[0]).price) * productAndQuantity[1]}</p> 
                                 </div>
                             );
                         }
                     })}
-                    <p>Your cart total is ${cartTotal}.</p>
+                    <p className="pt-2">Your cart total is ${cartTotal}.</p>
                     <button disabled={cartTotal > getNumericBalance(accountBalance)} className="mt-4 is-size-6" onClick={handleCheckout}>Checkout</button>
                     <div>
                         <p>{checkoutResult}</p>

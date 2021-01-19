@@ -1,7 +1,13 @@
-.searchContainer {
+/* .searchContainer {
+    border: white solid 1px;
+} */
+
+
+.searchWrapper {
     border: white solid 1px;
 }
 
-.searchInput {
-    width: 75%;
+.searchContainer {
+    display: flex;
+    justify-content: space-between
 }

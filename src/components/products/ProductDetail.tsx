@@ -2,6 +2,7 @@ import * as React from 'react';
 import { getProductById, isAdmin, ProductDataModel } from '../../api';
 import { Product } from './Product'
 import { useParams } from 'react-router';
+import './Product.css'
 import './ProductDetail.css'
 import { StarRating } from '../star/StarRating';
 
@@ -48,15 +49,15 @@ export const ProductDetail: React.FC = props => {
 
     const starRatingProps = {rating: productRating, setProductRating: setProductRating}
     return (
-        <div className="columns">
+        <div className="wrapper">
             {product ? (
-                <div className="column is-half">
+                <div className="">
                     <Product {...{ product: product, store: false }}/>
                 </div>
             ) : <div></div>}
 
             {isUserAdmin ? (
-                <form className="rows column is-one-quarter changeDetailsContainer p-4">
+                <form className="changeDetailsContainer p-4">
                     <h2 className="is-size-4">Change product details</h2>
                     <div className="field pt-2">
                         <label>Change Product Name</label>
