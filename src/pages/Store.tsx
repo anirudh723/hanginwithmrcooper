@@ -7,15 +7,14 @@ import { Search } from '../components/search/Search'
 //import { Sort } from '../components/sort';
 import { Sort } from '../components/sort/Sort';
 import { ORDER } from '../Order';
+import { getNumericBalance } from '../utils/getNumericBalance'
 
 const NOT_ENOUGH_QUANTITY = "Not enough quantity for this product. Please select a lower value";
-const PRICELESS = "priceless"
 
 export const Store: React.FC = props => {
     const [productsToBuy, setProductsToBuy] = React.useState(new Map<ProductDataModel, number>());
     const [accountBalance, setAccountBalance] = React.useState("");
     const [filterCriteria, setFilterCriteria] = React.useState(new Map<string, string | number[]>());
-    //const [sortCriteria, setSortCriteria] = React.useState("Name");
     const [sortTypes, setSortTypes] = React.useState(new Map<string, ORDER>());
     
     React.useEffect(() => {
@@ -54,14 +53,6 @@ export const Store: React.FC = props => {
     // const applySortCriteria = (sortCriteria: string): void => {
     //     setSortCriteria(sortCriteria);
     // }
-
-    // takes in the string dollar amount, strips the $ and commas, and returns the numeric value
-    const getNumericBalance = (balance: string): number => {
-        if (balance === PRICELESS) { // I'm making priceless just be 0.
-            return 0;
-        }
-        return +parseFloat(balance.substring(1).replace(/,/g, '')).toFixed(2);
-    }
 
     // props object for each child component
     const shoppingCartProps = { productsToBuy: productsToBuy, accountBalance: accountBalance, clearCart: clearCart }
