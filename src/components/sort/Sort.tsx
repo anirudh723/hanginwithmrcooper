@@ -5,14 +5,15 @@ import { Description } from './Description';
 import { Price } from './Price';
 import { Rating } from './Rating';
 import './Sort.css'
+import { ProductDataModel } from '../../api';
 
 interface SortProps {
-    applySortCriteria: (sortType: string, order: ORDER) => void
+    applySortCriteria: (sortType: keyof ProductDataModel, order: ORDER) => void
 }
 
 export const Sort: React.FC<SortProps> = ({applySortCriteria}) => {
 
-    const setSortType = (sortType: string, order: ORDER) => {
+    const setSortType = (sortType: keyof ProductDataModel, order: ORDER) => {
         applySortCriteria(sortType, order);
     }
 

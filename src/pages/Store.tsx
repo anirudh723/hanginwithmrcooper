@@ -6,13 +6,15 @@ import { ShoppingCart } from '../components/cart';
 import { Search } from '../components/search/Search'
 import { Sort } from '../components/sort/Sort';
 import { useStoreState } from '../useStoreState';
+import { SortType } from '../SortType';
+import { FilterType } from '../FilterType';
 import './Store.css'
   
 export const StoreContext = React.createContext({
-    productsToBuy: new Map(), 
+    productsToBuy: new Map<ProductDataModel, number>(), 
     accountBalance: "", 
-    filterCriteria: new Map(), 
-    sortTypes: new Map(), 
+    filterCriteria: [] as FilterType[], 
+    sortTypes: [] as SortType[], 
     addToCart: (productToBuy: ProductDataModel, quantity: number) => {return;}, 
     clearCart: (cartTotal: number) => {return;}
 });

@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import './Product.css'
 import './ProductDetail.css'
 import { StarRating } from '../star/StarRating';
+import { NAME, DESCRIPTION, PRICE, RATING } from '../../utils/constants';
 
 const _ = require("lodash")
 
@@ -31,10 +32,10 @@ export const ProductDetail: React.FC = props => {
     const handleProductChange = (event: React.MouseEvent) => {
         event.preventDefault();
         if (product) {
-            if (!(_.isEmpty(productName))) setProduct(_.clone(_.set(product, "name", productName)));
-            if (productPrice) setProduct(_.clone(_.set(product, "price", "$" + productPrice.toString())));
-            if (!(_.isEmpty(productDescription))) setProduct(_.clone(_.set(product, "description", productDescription)));
-            if (productRating != 0) setProduct(_.clone(_.set(product, "rating", productRating)));
+            if (!(_.isEmpty(productName))) setProduct(_.clone(_.set(product, NAME, productName)));
+            if (!(_.isEmpty(productDescription))) setProduct(_.clone(_.set(product, DESCRIPTION, productDescription)));
+            if (productPrice) setProduct(_.clone(_.set(product, PRICE, "$" + productPrice.toString())));
+            if (productRating != 0) setProduct(_.clone(_.set(product, RATING, productRating)));
             setFieldsToDefault(event);
         }
     }

@@ -4,15 +4,12 @@ import { Description } from './Description';
 import { Price } from './Price';
 import { Rating } from './Rating';
 import './Search.css';
-
-const NAME = "Name";
-const DESCRIPTION = "Description";
-const PRICE = "Price";
-const RATING = "Rating";
+import { FilterType } from '../../FilterType';
+import { NAME, DESCRIPTION, PRICE, RATING } from '../../utils/constants';
 const _ = require("lodash");
 
 interface SearchProps {
-    applyFilterCriteria: (filters: Map<string, string | number[]>) => void
+    applyFilterCriteria: (filters: FilterType[]) => void
 }
 
 export const Search: React.FC<SearchProps> = ({applyFilterCriteria}) => {
@@ -27,12 +24,12 @@ export const Search: React.FC<SearchProps> = ({applyFilterCriteria}) => {
     // set up the filter criteria in a map (search type: search value) to eventually give to the product list
     const handleSubmitSearch = (event: React.MouseEvent) => {
         event.preventDefault();
-        let filterCriteria = new Map<string, string | number[]>();
+        let filterCriteria = [] as FilterType[];
         
-        if (!(_.isEmpty(name))) filterCriteria.set(NAME, name);
-        if (!(_.isEmpty(description))) filterCriteria.set(DESCRIPTION, description);
-        if (lowerBoundPrice && upperBoundPrice) filterCriteria.set(PRICE, [lowerBoundPrice, upperBoundPrice]);
-        if (lowerBoundRating && upperBoundRating) filterCriteria.set(RATING, [lowerBoundRating, upperBoundRating]);
+        if (!(_.isEmpty(name))) filterCriteria.push([NAME, name]);
+        if (!(_.isEmpty(description))) filterCriteria.push([DESCRIPTION, description]);
+        if (lowerBoundPrice && upperBoundPrice) filterCriteria.push([PRICE, [lowerBoundPrice, upperBoundPrice]]);
+        if (lowerBoundRating && upperBoundRating) filterCriteria.push([RATING, [lowerBoundRating, upperBoundRating]]);
         
         setFieldsToDefault();
         applyFilterCriteria(filterCriteria);

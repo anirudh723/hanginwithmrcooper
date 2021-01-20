@@ -1,36 +1,39 @@
 import { ProductDataModel } from './api';
-import { getNumericBalance } from './utils/getNumericBalance'
-
-const NAME = "Name";
-const DESCRIPTION = "Description";
-const PRICE = "Price";
-const RATING = "Rating";
-
-const _ = require("lodash");
+import { getNumericBalance } from './utils/getNumericBalance';
+import { FilterType } from './FilterType';
+import { NAME, DESCRIPTION, PRICE, RATING } from './utils/constants';
 
 // custom hook that returns a function to filter products
-export const useFilterProducts = (): ((products: ProductDataModel[], filterCriteria: Map<string, string | number[]>) => ProductDataModel[]) => {
+export const useFilterProducts = (): ((products: ProductDataModel[], filterCriteria: FilterType[]) => ProductDataModel[]) => {
 
-    const filterProducts = (products: ProductDataModel[], filterCriteria: Map<string, string | number[]>): ProductDataModel[] => {
-        var filteredProducts = Array.from(products);
-        Array.from(filterCriteria.entries()).map(([type, filter]) => {
-            switch (type) {
+    // creates an array of filters (callbacks) using the given filter criteria
+    const getFilters = (filterCriteria: FilterType[]): ((product: ProductDataModel) => boolean)[] => {
+        let filters: { (product: ProductDataModel): boolean }[] = [];
+        for (let f of filterCriteria) {
+            switch (f[0]) {
                 case NAME:
-                    filteredProducts = _.filter(filteredProducts, product => product.name === filter);
+                    filters.push((product) => product.name.toLowerCase() === (f[1] as string).toLowerCase());
                     break;
                 case DESCRIPTION:
-                    filteredProducts = _.filter(filteredProducts, product => product.description === filter);
+                    filters.push((product) => product.description.toLowerCase() === (f[1] as string).toLowerCase());
                     break;
                 case PRICE:
-                    filteredProducts = _.filter(filteredProducts, product => getNumericBalance(product.price) >= filter[0] && getNumericBalance(product.price) <= filter[1]);
+                    filters.push((product) => getNumericBalance(product.price) >= f[1][0] && getNumericBalance(product.price) <= f[1][1]);
                     break;
                 case RATING:
-                    filteredProducts = _.filter(filteredProducts, product => product.rating >= filter[0] && product.rating <= filter[1]);
+                    filters.push((product) => product.rating >= f[1][0] && product.rating <= f[1][1]);
                     break;
             }
-        })
+        }
+        return filters;
+    }
+
+    // applies a chain of callbacks on the products and returns the filtered subset of them
+    const filterProducts = (products: ProductDataModel[], filterCriteria: FilterType[]): ProductDataModel[] => {
+        let filters = getFilters(filterCriteria);
+        let filteredProducts = filters.reduce((p, f) => p.filter(f), products)
         return filteredProducts;
     }
-    
+
     return filterProducts;
 }
