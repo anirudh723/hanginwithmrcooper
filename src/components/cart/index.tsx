@@ -7,7 +7,6 @@ const PRICELESS = "priceless"
 const CART_BALANCE_TOO_MUCH = "You cannot checkout because your cart balance is higher than your account balance."
 
 export const ShoppingCart: React.FC = props => {
-    const [checkoutResult, setCheckoutResult] = React.useState("");
     const [userName, setUserName] = React.useState("");
     const [cartTotal, setCartTotal] = React.useState(0);
     const { productsToBuy, accountBalance, clearCart } = React.useContext(StoreContext);
@@ -33,7 +32,7 @@ export const ShoppingCart: React.FC = props => {
         checkout(products)
         .then(result => {
             clearCart(cartTotal);
-            setCheckoutResult(result);
+            alert(result);
         });
     }
 
@@ -66,7 +65,6 @@ export const ShoppingCart: React.FC = props => {
                     <p className="pt-2">Your cart total is ${cartTotal}.</p>
                     <button disabled={cartTotal > getNumericBalance(accountBalance)} className="mt-4 is-size-6" onClick={handleCheckout}>Checkout</button>
                     <div>
-                        <p>{checkoutResult}</p>
                         {cartTotal > getNumericBalance(accountBalance) ? <span>{CART_BALANCE_TOO_MUCH}</span> : <span></span>}
                     </div>
                 </div>

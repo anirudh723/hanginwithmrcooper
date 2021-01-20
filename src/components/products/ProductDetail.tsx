@@ -74,6 +74,7 @@ export const ProductDetail: React.FC = props => {
                         <input
                             className="p-2 mb-5 detailChangeBox"
                             type="number"
+                            min={0}
                             placeholder="Enter new price here..."
                             value={productPrice || ""}
                             onChange={(e) => { setProductPrice(e.target.valueAsNumber) }} 

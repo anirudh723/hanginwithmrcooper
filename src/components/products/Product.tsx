@@ -35,6 +35,7 @@ export const Product: React.FC<ProductProps> = ({product, handleAddToCart, store
                             className="p-1"
                             id={(product.id).toString()}
                             type="number"
+                            min={0}
                             placeholder="Enter product quantity"
                             value={quantity}
                             onChange={(e) => { setQuantity(e.target.valueAsNumber) }}
